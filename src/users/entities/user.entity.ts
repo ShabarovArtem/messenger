@@ -15,17 +15,17 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-    @Column({ select: false })
-    password: string;
+  @Column({ select: false })
+  password: string;
 
-    @Column({ default: () => 'uuid()' })
-    refreshToken: string;
+  @Column({ default: () => 'uuid()' })
+  refreshToken: string;
 
-    @Column({ default: true })
-    isEnabled: boolean;
+  @Column({ default: true })
+  isEnabled: boolean;
 
-  @Column({ nullable: true })
-  name?: string;
+  @Column()
+  name: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
