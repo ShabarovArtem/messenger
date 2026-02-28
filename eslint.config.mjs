@@ -3,7 +3,18 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 
 export default [
-  { files: ['**/*.ts'] }, // Базовый паттерн для всех
+  {
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      '**/*.js',
+      'logs/**',
+      'coverage/**',
+    ],
+  },
+  {
+    files: ['**/*.ts'],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {

@@ -1,10 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, BeforeInsert } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
+
+  @BeforeInsert()
+  generateUserId() {
+    if (!this.id) this.id = uuidv4();
+  }
 
   @Column({ unique: true })
   email: string;
@@ -14,7 +20,7 @@ export class User {
   password: string;
 
   @Exclude()
-  @Column({ default: () => 'uuid()', select: false })
+  @Column({ nullable: true, select: false })
   refreshToken: string;
 
   @Column({ default: true })
