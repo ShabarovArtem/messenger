@@ -3,12 +3,13 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 
 export default [
+  { files: ['**/*.ts'] }, // Базовый паттерн для всех
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
-  prettier,
   {
     rules: {
       '@typescript-eslint/no-unsafe-*': 'off',
     },
   },
+  prettier,
 ];
