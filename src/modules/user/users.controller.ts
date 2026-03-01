@@ -4,12 +4,16 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetCurrentUser } from '../../shared/decorators/get-current-user.decorator';
 import type { UserPayload } from '../../shared/types/auth.interface';
 import { UserDomainService } from '../../domain/user/user-domain.service';
+import { Roles } from '../../shared/decorators/roles.decorator';
+import { Role } from '../../shared/enums/role.enum';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UserDomainService) {}
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Admin)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

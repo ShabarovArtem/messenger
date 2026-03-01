@@ -11,6 +11,7 @@ import { RegisterDto } from '../../shared/dto/auth/register.dto';
 import { AuthGuard } from '@nestjs/passport';
 import type { UserPayload } from '../../shared/types/auth.interface';
 import { GetCurrentUser } from '../../shared/decorators/get-current-user.decorator';
+import { RefreshTokenDto } from '../../shared/dto/auth/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -26,5 +27,18 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   login(@GetCurrentUser() user: UserPayload) {
     return this.authService.login(user);
+  }
+
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  logout(@GetCurrentUser() user: UserPayload) {
+    return this.authService.logout(user.id);
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  refresh(@Body() dto: RefreshTokenDto) {
+    return this.authService.refreshTokens(dto);
   }
 }

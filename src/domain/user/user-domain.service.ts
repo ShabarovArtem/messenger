@@ -14,7 +14,11 @@ export class UserDomainService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = this.userRepository.create(createUserDto);
     const savedUser = await this.userRepository.save(user);
-    const { password, refreshToken, ...safeUser } = savedUser;
+    const {
+      password: _password,
+      refreshToken: _refreshToken,
+      ...safeUser
+    } = savedUser;
     return safeUser as User;
   }
 
@@ -36,7 +40,38 @@ export class UserDomainService {
   async findById(id: string): Promise<User | null> {
     return this.userRepository.findOne({
       where: { id, isEnabled: true },
-      select: ['id', 'email', 'name', 'isEnabled', 'createdAt', 'updatedAt'],
+      select: [
+        'id',
+        'email',
+        'name',
+        'role',
+        'isEnabled',
+        'createdAt',
+        'updatedAt',
+      ],
     });
+  }
+
+  async findByIdWithRefreshToken(id: string): Promise<User | null> {
+    return this.userRepository.findOne({
+      where: { id, isEnabled: true },
+      select: [
+        'id',
+        'email',
+        'name',
+        'role',
+        'isEnabled',
+        'createdAt',
+        'updatedAt',
+        'refreshToken',
+      ],
+    });
+  }
+
+  async updateRefreshToken(
+    id: string,
+    refreshToken: string | null,
+  ): Promise<void> {
+    await this.userRepository.update(id, { refreshToken });
   }
 }

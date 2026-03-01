@@ -1,6 +1,7 @@
 import { Entity, PrimaryColumn, Column, BeforeInsert } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { v4 as uuidv4 } from 'uuid';
+import { Role } from '../../../shared/enums/role.enum';
 
 @Entity('users')
 export class User {
@@ -20,14 +21,17 @@ export class User {
   password: string;
 
   @Exclude()
-  @Column({ nullable: true, select: false })
-  refreshToken: string;
+  @Column({ type: 'text', nullable: true, select: false })
+  refreshToken: string | null;
 
   @Column({ default: true })
   isEnabled: boolean;
 
   @Column({ nullable: true })
   name: string;
+
+  @Column({ type: 'enum', enum: Role, default: Role.User })
+  role: Role;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
