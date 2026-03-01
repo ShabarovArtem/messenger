@@ -6,9 +6,12 @@ import {
 import { RegisterDto } from '../../shared/dto/auth/register.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { LoginResponse, UserPayload } from '../../shared/types/auth.interface';
+import {
+  LoginResponse,
+  UserPayload,
+  JwtPayload,
+} from '../../shared/types/auth.interface';
 import { UserDomainService } from '../../domain/user/user-domain.service';
-import { JwtPayload } from 'jsonwebtoken';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()
@@ -28,10 +31,9 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    return this.login({
-      id: user.id,
-      email: user.email,
-    });
+    const fullUser = await this.usersService.findById(user.id);
+
+    return this.login(fullUser as UserPayload);
   }
 
   async validateUser(email: string, pass: string): Promise<UserPayload> {
@@ -46,8 +48,18 @@ export class AuthService {
 
   async login(user: JwtPayload | UserPayload): Promise<LoginResponse> {
     const payload = { email: user.email, sub: user.id };
-    return {
+    const response: LoginResponse = {
       access_token: this.jwtService.sign(payload),
     };
+
+    if ('name' in user) {
+      response.user = {
+        id: user.id,
+        email: user.email,
+        name: (user as UserPayload).name,
+      };
+    }
+
+    return response;
   }
 }

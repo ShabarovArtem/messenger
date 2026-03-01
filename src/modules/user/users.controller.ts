@@ -14,13 +14,13 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.usersService.findById(id);
-  }
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
   getProfile(@GetCurrentUser() user: UserPayload) {
     return user;
+  }
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.usersService.findById(id);
   }
 }

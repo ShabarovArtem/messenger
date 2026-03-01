@@ -26,7 +26,7 @@ export class User {
   @Column({ default: true })
   isEnabled: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

@@ -2,6 +2,7 @@ import { User } from '../../domain/user/entities/user.entity';
 
 export interface LoginResponse {
   access_token: string;
+  user?: Pick<UserPayload, 'id' | 'email' | 'name'>;
 }
 
 export interface JwtPayload {
