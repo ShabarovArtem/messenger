@@ -6,7 +6,9 @@ import type { UserPayload } from '../../shared/types/auth.interface';
 import { UserDomainService } from '../../domain/user/user-domain.service';
 import { Roles } from '../../shared/decorators/roles.decorator';
 import { Role } from '../../shared/enums/role.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UserDomainService) {}
@@ -14,12 +16,14 @@ export class UsersController {
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @Roles(Role.Admin)
+  @ApiBearerAuth()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Get('profile')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   getProfile(@GetCurrentUser() user: UserPayload) {
     return user;
   }
