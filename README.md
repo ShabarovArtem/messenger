@@ -22,16 +22,27 @@ docker-compose up -d
 Ожидается, что в `.env` заданы переменные:
 
 ```bash
-POSTGRES_DB=proj
-POSTGRES_USER=proj
-POSTGRES_PASSWORD=proj
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5433
+# App
+NODE_ENV=
+PORT=
+
+# PostgreSQL
+POSTGRES_HOST=
+POSTGRES_PORT=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_DB=
+DATABASE_URL=
+
+# Redis
+REDIS_HOST=
+REDIS_PORT=
+REDIS_PASSWORD=
+REDIS_DB=
+REDIS_URL=
 
 JWT_SECRET=
 JWT_REFRESH_SECRET=
-
-REDIS_PASSWORD=redis_password
 ```
 
 3. Запустить backend в dev-режиме:
