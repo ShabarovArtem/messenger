@@ -8,10 +8,12 @@ import { MessageDomainService } from '../../domain/message/message-domain.servic
 import { ConversationsController } from './conversations.controller';
 import { MessagesController } from './messages.controller';
 import { ChatGateway } from './chat.gateway';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Conversation, ConversationParticipant, Message]),
+    AuthModule,
   ],
   controllers: [ConversationsController, MessagesController],
   providers: [ConversationDomainService, MessageDomainService, ChatGateway],
