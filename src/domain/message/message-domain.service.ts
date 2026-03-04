@@ -35,4 +35,18 @@ export class MessageDomainService {
       skip: offset,
     });
   }
+
+  async markMessagesAsReadForConversation(
+    conversationId: string,
+    userId: string,
+  ): Promise<void> {
+    await this.messageRepository
+      .createQueryBuilder()
+      .update(Message)
+      .set({ isRead: true })
+      .where('conversationId = :conversationId', { conversationId })
+      .andWhere('senderId != :userId', { userId })
+      .andWhere('isRead = :isRead', { isRead: false })
+      .execute();
+  }
 }

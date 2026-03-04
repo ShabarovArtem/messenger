@@ -60,4 +60,23 @@ export class ConversationsController {
       query.offset,
     );
   }
+
+  @Post(':conversationId/read')
+  async markConversationMessagesAsRead(
+    @GetCurrentUser() user: UserPayload,
+    @Param('conversationId') conversationId: string,
+  ) {
+    const conversation =
+      await this.conversationsService.ensureUserInConversation(
+        conversationId,
+        user.id,
+      );
+
+    await this.messageService.markMessagesAsReadForConversation(
+      conversation.id,
+      user.id,
+    );
+
+    return { success: true };
+  }
 }

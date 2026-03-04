@@ -1,3 +1,5 @@
+import { Server, Socket } from 'socket.io';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -5,10 +7,10 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { ConversationDomainService } from '../../domain/conversation/conversation-domain.service';
 import type { JwtPayload } from '../../shared/types/auth.interface';
+import { JoinConversationDto } from '../../shared/dto/messages/join-conversation.dto';
 
 type AuthedSocket = Socket & {
   data: Socket['data'] & {
@@ -61,9 +63,15 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('joinConversation')
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  )
   async handleJoinConversation(
     @ConnectedSocket() client: AuthedSocket,
-    @MessageBody() data: { conversationId: string },
+    @MessageBody() data: JoinConversationDto,
   ): Promise<void> {
     const user = client.data.user;
     if (!user) {
